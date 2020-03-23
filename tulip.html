@@ -1,0 +1,121 @@
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>Tulip - Project Polya</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    
+<!--==========================================-->
+<!-- Override "includes/head-extras.html.eex" -->
+<!-- to add more tags inside this <head> tag. -->
+<!--==========================================-->
+
+  </head>
+  <body>
+    <div id="wrapper">
+      <header id="top">
+
+<img src="https://avatars2.githubusercontent.com/u/62010443?s=200&v=4" />
+<h1 class="center"><a href="/">Project Polya</a></h1>
+<p class="center">A series of tools for project grading of CSE students</p>
+</header>
+      <nav>
+<ul class="center">
+  <li><a href="/index.html">Home</a></li>
+  <li><a href="/nutshell.html">Nutshell</a></li>
+  <li><a href="/tulip.html">Tulip</a></li>
+  <li><a href="/wintersweet.html">Wintersweet</a></li>
+  <li><a href="/polya.html">Why Polya</a></li>
+  <li><a href="/posts">News</a></li>
+</ul>
+</nav>
+      <hr>
+      <main><article><div><h1 id="tulip">Tulip</h1><p><img src="https://raw.githubusercontent.com/project-polya/tulip/master/logo.png" alt="logo.png"/></p><p>Tulip is a part of <a href="https://github.com/project-polya">Project Polya</a>. It is the endpoint program, which is responsible for creating the judge environment and running the student project.</p><p>You can visit the <a href="https://github.com/project-polya/tulip">repository here</a>.</p><p>Tulip is also available at <a href="https://crates.io/https://crates.io/crates/tulip">crates.io</a>. You can install it via:</p><pre><code class="text">cargo install tulip --force</code></pre><h2 id="overview">Overview</h2><pre><code class="text">tulip 0.1.0
+
+USAGE:
+    tulip [OPTIONS] &lt;SUBCOMMAND&gt;
+
+FLAGS:
+    -h, --help       Prints help information
+    -V, --version    Prints version information
+
+OPTIONS:
+    -l, --log-level &lt;log-level&gt;    The log level [env: TULIP_LOG_LEVEL=]  [default: info]  [possible values: error,
+                                   trace, info, debug, off, warn]
+    -n, --nutshell &lt;nutshell&gt;      Path to nutshell binary [env: NUTSHELL_BIN=]  [default: nutshell]
+    -t, --tulip-dir &lt;tulip-dir&gt;    The work directory of tulip [env: TULIP_DIR=]  [default: .tulip]
+
+SUBCOMMANDS:
+    auto-current       Auto run the current project
+    build              Build the current project
+    clean-all          Unregister the client and clean up local environment
+    clear              Clear the current project
+    comment            Open the comment editor
+    destroy-overlay    Delete the current overlay system
+    enter-sandbox      Manually enter the sandbox
+    fetch              Fetch student project
+    grade              Give a grade to the student
+    help               Prints this message or the help of the given subcommand(s)
+    init-overlay       Initialize the overlay filesystem
+    mark               Mark the current project
+    pull               Pull the target student project
+    pull-image         Pull the base image
+    refresh-config     Refresh the global config
+    register           Register this client
+    report             Read the report
+    run                Build the current project
+    skip               Skip the current project
+    status             See the current status
+    submit             Edit current global settings</code></pre><h2 id="requirements-for-use">Requirements for Use</h2><ul><li><p><code class="inline">Linux</code> is required.</p></li><li><p><a href="https://crates.io/crates/nutshell"><code class="inline">nutshell</code></a> is installed and put in the <code class="inline">PATH</code>.</p></li><li><p>One of <code class="inline">aria2c</code> and <code class="inline">wget</code> is ready.</p></li><li><p><code class="inline">openssl</code> is usable for <code class="inline">https</code> .</p></li><li><p><code class="inline">sudo</code> is within the <code class="inline">PATH</code> and you have the right to become the root.</p></li><li><p><code class="inline">systemd-nspawn</code>  and <code class="inline">firejail</code> is required for sandbox.</p></li></ul><h2 id="requirements-for-build">Requirements for Build</h2><ul><li><code class="inline">Linux</code> is required.
+</li><li>Make sure your rust tool-chain is functioning.
+</li><li><code class="inline">cmake</code> is installed and <code class="inline">c/c++</code> development environment is ready to be invoked by <code class="inline">cargo</code>.
+</li></ul><h2 id="environment-variables">Environment Variables</h2><ul><li><p>The following variables are optional and they can also be passed as command-line arguments:</p><ul><li><p><code class="inline">TULIP_LOG_LEVEL</code> The log level of <code class="inline">tulip</code>, set to <code class="inline">info</code> by default. It is recommended to set a level finer than <code class="inline">warn</code>. Possible values:</p><ul><li><p>off</p></li><li><p>error</p></li><li><p>warn</p></li><li><p>info</p></li><li><p>debug</p></li><li><p>trace</p></li></ul></li><li><p><code class="inline">TULIP_REPORT_READER</code> The application to open student report, set to <code class="inline">xdg-open</code> by default.</p></li><li><p><code class="inline">NUTSHELL_BIN</code> Path to the <code class="inline">nutshell</code> executable, set to <code class="inline">nutshell</code> by default.</p></li><li><p><code class="inline">TULIP_DIR</code> The work directory of <code class="inline">tulip</code>, set <code class="inline">.tulip</code> by default</p></li><li><p><code class="inline">TULIP_MOUNT_DIR</code> The mount directory of the temporary <code class="inline">overlayfs</code>. <strong>Attention: This is set to <code class="inline">\mnt</code> be default</strong></p></li></ul></li><li><p>The following system wise variables are used:</p><ul><li><code class="inline">EDITOR</code> will be used when editing configurations if it is set
+</li></ul></li><li><p>The following variables must be provided or passed as command-line arguments:</p><ul><li><code class="inline">TULIP_SERVER</code> will be used when registering if it is set
+</li><li><code class="inline">TULIP_TOKEN</code> will be used when registering if it is set
+</li></ul></li></ul><h2 id="about-the-status-of-grading">About the Status of Grading</h2><ul><li><p>Once a project is fetched it is locked by the fetcher.</p></li><li><p>The project can be unlocked by <code class="inline">commit/skip/revoke</code>, where the last operation is included in <code class="inline">clean-all</code>.</p></li><li><p><code class="inline">pull</code>  is always allowed. However, <code class="inline">pull</code> will not lock the project, you will always need to use <code class="inline">--override</code> flag to update the remote status if the current project is pulled rather than fetched.</p></li><li><p><code class="inline">commit</code>  can be used to commit the current project. However, if a previous submission exists, <code class="inline">--override</code> flag must be set.</p></li><li><p><code class="inline">fetch</code> will automatically get the next untouched project.</p></li><li><p><code class="inline">skip</code> can ignore the current project and unlock it. However, once a project is <code class="inline">skipped</code>, it can only be pulled and will not be put into the fetch-able list.</p></li></ul><h2 id="about-the-procedure-of-grading">About the Procedure of Grading</h2><ul><li><p>You need to register a UUID at the very beginning.</p></li><li><p>You should pull an image before grading. The default <code class="inline">pull-image</code> will download the image and the global configurations.  However, both of them can be set locally. </p><ul><li><p><code class="inline">image</code> can be set by putting the image  to  <code class="inline">&lt;workdir&gt;/image/image.sfs</code> and invoking the <code class="inline">pull-image</code> subcommand with <code class="inline">--local-set</code></p></li><li><p><code class="inline">global-config</code> can be set by <code class="inline">tulip status edit-global</code></p></li></ul></li><li><p>Now, you can either pull or fetch a project. When pulling, you can use <code class="inline">tulip status remote [--detail]</code> or <code class="inline">tulip status remote-id --id &lt;student id&gt;</code> . If you experience a download error when fetching the project file or you just want to update the current project info, you can use <code class="inline">tulip fetch --download-only</code></p></li><li><p>How, you can initialize the overlay. The student files are <code class="inline">rsynced</code> into the <code class="inline">/data</code> directory in the chroot environment.</p></li><li><p>You can run <code class="inline">build</code> subcommand to build the project.</p></li><li><p>You can run <code class="inline">run</code> subcommand to run the project.</p></li><li><p>You can use <code class="inline">comment</code> subcommand to leave a comment.</p></li><li><p>You can use <code class="inline">grade -s &lt;score&gt;</code> subcommand to grade the project.</p></li><li><p>You can use <code class="inline">mark [-r]</code> subcommand to mark/unmark the project.</p></li><li><p>You can use <code class="inline">commit/skip</code> subcommand to submit/skip the project.</p></li><li><p>You can use <code class="inline">report</code> subcommand to read the report of the student.</p></li><li><p>During the whole procedure, you can use <code class="inline">enter-sandbox</code> to enter the sandbox, both<code class="inline">firejail</code> and <code class="inline">systemd-nspawn</code> .</p></li><li><p>After a local project is set, building-running-report process can be invoked in a whole by the <code class="inline">auto-current</code> subcommand.</p></li></ul><h2 id="notice">Notice</h2><p>There are a lot of more details: for example, you can force to rebuild, force to re-grade, directly edit the status, etc. All the features are described in detail in the CLI. Feel free to invoke the CLI with <code class="inline">--help</code> whenever you feel confused.</p><h2 id="configuration">Configuration</h2><ul><li><a href="https://github.com/project-polya/tulip/blob/master/global.md">global configuration</a></li><li><a href="https://github.com/project-polya/tulip/blob/master/student.md">student configuration</a></li></ul></div></article></main>
+      <hr>
+      <footer>
+        
+<!--=====================================-->
+<!-- Override "includes/footer.html.eex" -->
+<!-- to customize your footer contents.  -->
+<!--=====================================-->
+
+        <p>
+          Powered by <a href="https://github.com/Dalgona/Serum">Serum</a> v1.4.1,
+          with <a href="https://github.com/Dalgona/serum-theme-essence">Essence</a> theme
+        </p>
+        <p>
+          Project Polya © 2020
+        </p>
+      </footer>
+    </div>
+    <script src="/assets/js/prism.js"></script>
+  </body>
+</html>
+<script>
+const ws_url = "ws://" + location.host + "/serum_live_reloader";
+var ws;
+
+connect();
+
+function connect() {
+  ws = new WebSocket(ws_url);
+  ws.onmessage = onMessage;
+  ws.onclose = onClose;
+}
+
+function onMessage(e) {
+  if (e.data === "reload") {
+    location.reload();
+  }
+}
+
+function onClose(e) {
+  console.warn("WebSocket disconnected from server. Reconnecting in 10 seconds.");
+  setTimeout(connect, 10000)
+}
+</script>

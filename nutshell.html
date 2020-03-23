@@ -1,0 +1,149 @@
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>Nutshell - Project Polya</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    
+<!--==========================================-->
+<!-- Override "includes/head-extras.html.eex" -->
+<!-- to add more tags inside this <head> tag. -->
+<!--==========================================-->
+
+  </head>
+  <body>
+    <div id="wrapper">
+      <header id="top">
+
+<img src="https://avatars2.githubusercontent.com/u/62010443?s=200&v=4" />
+<h1 class="center"><a href="/">Project Polya</a></h1>
+<p class="center">A series of tools for project grading of CSE students</p>
+</header>
+      <nav>
+<ul class="center">
+  <li><a href="/index.html">Home</a></li>
+  <li><a href="/nutshell.html">Nutshell</a></li>
+  <li><a href="/tulip.html">Tulip</a></li>
+  <li><a href="/wintersweet.html">Wintersweet</a></li>
+  <li><a href="/polya.html">Why Polya</a></li>
+  <li><a href="/posts">News</a></li>
+</ul>
+</nav>
+      <hr>
+      <main><article><div><h1 id="nutshell">Nutshell</h1><p><img src="https://raw.githubusercontent.com/project-polya/nutshell/master/logo.png" alt="nutshell"/></p><p>Create a judge environment in a <strong>nutshell</strong>! </p><p>Nutshell is a part of <a href="https://github.com/project-polya">Project Polya</a>. This project means to provide a
+CLI helper for teachers/students to set up their own sandboxed environment, so that they can work together
+smoothly in later grading.</p><p>You can visit the <a href="https://github.com/project-polya/nutshell">repository here</a>.</p><p>Nutshell is also available at <a href="https://crates.io/https://crates.io/crates/nutshell">crates.io</a>. You can install it via:</p><pre><code class="text">cargo install nutshell --force</code></pre><h2 id="how-to-use?">How to use?</h2><p>Why not check the help page first?</p><pre><code class="text">nutshell 0.1.0
+
+USAGE:
+    nutshell &lt;SUBCOMMAND&gt;
+
+FLAGS:
+    -h, --help       Prints help information
+    -V, --version    Prints version information
+
+SUBCOMMANDS:
+    create-root      create an arch chroot environment
+    help             Prints this message or the help of the given subcommand(s)
+    init-overlay     initialize an overlay file system
+    make-squashfs    create a squashfs</code></pre><h3 id="create-root">create-root</h3><pre><code class="text">nutshell-create-root 0.1.0
+create an arch chroot environment
+
+USAGE:
+    nutshell create-root [FLAGS] [OPTIONS] --target-dir &lt;target-dir&gt;
+
+FLAGS:
+    -h, --help       Prints help information
+    -s, --shell      enter the chroot environment after basic setups
+    -V, --version    Prints version information
+
+OPTIONS:
+    -d, --download-backend &lt;download-backend&gt;    downloader [default: aria2c]  [possible values: aria2c, wget, pacstrap]
+    -m, --mirror &lt;mirror&gt;                        image download mirror [default: https://mirrors.kernel.org/archlinux/]
+    -l, --mirror-list &lt;mirror-list&gt;              pacman mirror list
+    -p, --pacman-config &lt;pacman-config&gt;          pacman config file
+    -t, --target-dir &lt;target-dir&gt;                target directory to create the root              </code></pre><p>This command helps you to create an Arch Linux chroot environment. You can set your own download backend:
+<code class="inline">aria2c</code>, <code class="inline">wget</code>, <code class="inline">pacstrap</code> are all available.</p><p>This command will download the bootstrap tar of Arch and then extract it into the target directory. Using <code class="inline">systemd-nspawn</code>,
+it will populate GPG keys and run some basic updates. It will also prepare the <code class="inline">base</code> and <code class="inline">base-devel</code> environment.</p><h4 id="for-users-from-mainland-china">For Users from Mainland China</h4><p>You are highly recommeneded to set a download mirror at mainland, such as <code class="inline">https://mirrors.tuna.tsinghua.edu.cn/archlinux/</code>.
+As for the <code class="inline">mirrorlist</code>, you may want some configurations like the following:</p><pre><code class="text"># mirrorlist
+Server = https://ftp.sjtu.edu.cn/archlinux/$repo/os/$arch
+Server = https://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch
+Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch</code></pre><h3 id="init-overlay">init-overlay</h3><pre><code class="text">nutshell-init-overlay 0.1.0
+initialize an overlay file system
+
+USAGE:
+    nutshell init-overlay [FLAGS] [OPTIONS] --base-dir &lt;base-dir&gt; --data-dir &lt;data-dir&gt; --mount-dir &lt;mount-dir&gt;
+
+FLAGS:
+    -h, --help            Prints help information
+    -p, --print-result    print the result in json format
+    -s, --shell           enter the chroot environment after mount
+    -V, --version         Prints version information
+
+OPTIONS:
+    -b, --base-dir &lt;base-dir&gt;      the path to the lowerdir
+    -d, --data-dir &lt;data-dir&gt;      the path store workdir and upperdir
+    -m, --mount-dir &lt;mount-dir&gt;    the path to mount the merged root
+    -t, --tmp-size &lt;tmp-size&gt;      create and bind a tmpfs with the given size</code></pre><p>This command helps to mount a squashfs file with an overlay layer. <code class="inline">data-dir</code> and <code class="inline">base-dir</code> are the temporary storage path needed for overlay layer.</p><h3 id="make-squashfs">make-squashfs</h3><pre><code class="text">nutshell-make-squashfs 0.1.0
+create a squashfs
+
+USAGE:
+    nutshell make-squashfs [FLAGS] --source &lt;source&gt; --target &lt;target&gt;
+
+FLAGS:
+    -f, --faster     make the process faster by disabling high quality compression
+    -h, --help       Prints help information
+    -V, --version    Prints version information
+
+OPTIONS:
+    -s, --source &lt;source&gt;    source directory
+    -t, --target &lt;target&gt;    target path</code></pre><p>This command is just a wrapper of <code class="inline">mksquashfs</code>. It will help to create a squashfs file that can be used
+in the Project Polya. </p><p>By default, it uses <code class="inline">-comp lz4 -Xhc</code> as the compression args. </p><h2 id="btw,-we-use-arch-linux">BTW, we use Arch Linux</h2><p><img src="https://raw.githubusercontent.com/project-polya/nutshell/master/arch.png" alt="arch logo"/>
+We find that Arch Linux enjoy lots of up to date packages and a very lighweight design principle,
+which make it a very ideal Linux distro for Project Polya.
+However, you can always pack your own Linux distro if you like.</p></div></article></main>
+      <hr>
+      <footer>
+        
+<!--=====================================-->
+<!-- Override "includes/footer.html.eex" -->
+<!-- to customize your footer contents.  -->
+<!--=====================================-->
+
+        <p>
+          Powered by <a href="https://github.com/Dalgona/Serum">Serum</a> v1.4.1,
+          with <a href="https://github.com/Dalgona/serum-theme-essence">Essence</a> theme
+        </p>
+        <p>
+          Project Polya © 2020
+        </p>
+      </footer>
+    </div>
+    <script src="/assets/js/prism.js"></script>
+  </body>
+</html>
+<script>
+const ws_url = "ws://" + location.host + "/serum_live_reloader";
+var ws;
+
+connect();
+
+function connect() {
+  ws = new WebSocket(ws_url);
+  ws.onmessage = onMessage;
+  ws.onclose = onClose;
+}
+
+function onMessage(e) {
+  if (e.data === "reload") {
+    location.reload();
+  }
+}
+
+function onClose(e) {
+  console.warn("WebSocket disconnected from server. Reconnecting in 10 seconds.");
+  setTimeout(connect, 10000)
+}
+</script>

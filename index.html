@@ -1,0 +1,93 @@
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>Home - Project Polya</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    
+<!--==========================================-->
+<!-- Override "includes/head-extras.html.eex" -->
+<!-- to add more tags inside this <head> tag. -->
+<!--==========================================-->
+
+  </head>
+  <body>
+    <div id="wrapper">
+      <header id="top">
+
+<img src="https://avatars2.githubusercontent.com/u/62010443?s=200&v=4" />
+<h1 class="center"><a href="/">Project Polya</a></h1>
+<p class="center">A series of tools for project grading of CSE students</p>
+</header>
+      <nav>
+<ul class="center">
+  <li><a href="/index.html">Home</a></li>
+  <li><a href="/nutshell.html">Nutshell</a></li>
+  <li><a href="/tulip.html">Tulip</a></li>
+  <li><a href="/wintersweet.html">Wintersweet</a></li>
+  <li><a href="/polya.html">Why Polya</a></li>
+  <li><a href="/posts">News</a></li>
+</ul>
+</nav>
+      <hr>
+      <main><article><div><h1 id="welcome-to-project-polya">Welcome to Project Polya</h1><h2 id="introduction">Introduction</h2><p>Project Polya is a group of repositories designed to bring ease and joy for the project grading of CSE
+students, focusing on friendliness, safety and efficiency.</p><p><strong>Why not use online judges directly?</strong> Very often, students’s projects cannot be automatically checked 
+by those existing OJs. Teachers may also list UX, GUI, robustness and report as the grading criteria
+and manual grading is required. These are the cases when normal online judges are not working well. </p><p>Most teachers then ask students to write reports and manuals, so that they can understand the code and become capable of compiling these code on their own. However, this method leads to a lot more questions:</p><ul><li>The different distros of Linux are always bring headache to both teachers and students
+</li><li>Some students may require the teachers to install some extra libraries or softwares before compiling their code, this may polute teachers’ server or personal computers.
+</li><li>It is hard to limit the resource of student projects.
+</li><li>It may still be hard for the teacher to setup the envrionment smoothly.
+</li></ul><p>With the aim to solve the problems above, we instroduce Project Polya to become teachers’ amd students’ assistant. It will bring out the following changes to the current situation:</p><ul><li>Teachers can create a base squashfs and send out to students to do the preparation and test, 
+</li><li>Using <code class="inline">overlayfs</code>, <code class="inline">firejail</code>, and <code class="inline">systemd-nspawn</code>, an sandboxed environment can be created and adjusted for real application. You can grade the projects without affect your own environment.
+</li><li>Students can now write their own building and writing scripts. Teachers can <code class="inline">shellcheck</code> them and then run them in the isolated environment directly.
+</li><li>The server of Project Polya can help teachers control the grading state and export reports and grade list.
+</li></ul><h3 id="alternatives?">Alternatives?</h3><p>We are hoping that you can enjoy the grading with Project Polya, but if you don’t feel like using our solution, there are several other solutions you can adopt:</p><ul><li><code class="inline">Docker</code>/<code class="inline">Podman</code> based building can be used but you may need to write your own cli helpers.
+</li><li><code class="inline">x11docker</code> can help you run isolated <code class="inline">x11</code> programs, but the experience is not that good for gradings. 
+</li><li>Using <code class="inline">firejail</code>/<code class="inline">systemd-nspawn</code> seperately can also be a choice for you
+</li></ul><h2 id="maintainers">Maintainers</h2><p><a href="https://github.com/schrodingerzhu">Schrodinger Zhu</a></p><p><a href="https://github.com/outloudvi">Outloud V</a></p></div></article></main>
+      <hr>
+      <footer>
+        
+<!--=====================================-->
+<!-- Override "includes/footer.html.eex" -->
+<!-- to customize your footer contents.  -->
+<!--=====================================-->
+
+        <p>
+          Powered by <a href="https://github.com/Dalgona/Serum">Serum</a> v1.4.1,
+          with <a href="https://github.com/Dalgona/serum-theme-essence">Essence</a> theme
+        </p>
+        <p>
+          Project Polya © 2020
+        </p>
+      </footer>
+    </div>
+    <script src="/assets/js/prism.js"></script>
+  </body>
+</html>
+<script>
+const ws_url = "ws://" + location.host + "/serum_live_reloader";
+var ws;
+
+connect();
+
+function connect() {
+  ws = new WebSocket(ws_url);
+  ws.onmessage = onMessage;
+  ws.onclose = onClose;
+}
+
+function onMessage(e) {
+  if (e.data === "reload") {
+    location.reload();
+  }
+}
+
+function onClose(e) {
+  console.warn("WebSocket disconnected from server. Reconnecting in 10 seconds.");
+  setTimeout(connect, 10000)
+}
+</script>
